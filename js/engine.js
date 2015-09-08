@@ -80,7 +80,6 @@ var Engine = (function(global) {
   */
   function update(dt) {
     updateEntities(dt);
-    // checkCollisions();
   }
 
   /* This is called by the update function  and loops through all of the
@@ -94,7 +93,7 @@ var Engine = (function(global) {
     allEnemies.forEach(function(enemy) {
       enemy.update(dt);
     });
-    player.update();
+    board.update(dt);
   }
 
   /* This function initially draws the "game level", it will then call
@@ -132,10 +131,13 @@ var Engine = (function(global) {
         * so that we get the benefits of caching these images, since
         * we're using them over and over.
         */
-        ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+        ctx.drawImage(Resources.get(rowImages[row]), col * Resources.COL_SIZE, row * Resources.ROW_SIZE);
       }
     }
 
+    ctx.font = "48px cursive";
+    ctx.fillText("Time:", 10, 40);
+    ctx.fillText("Score:", 2 * Resources.COL_SIZE + 60, 40);
 
     renderEntities();
   }
@@ -145,14 +147,20 @@ var Engine = (function(global) {
   * on your enemy and player entities within app.js
   */
   function renderEntities() {
+    player.render();
+
     /* Loop through all of the objects within the allEnemies array and call
     * the render function you have defined.
     */
+    if (board.isFinished()) {
+      return;
+    }
+
     allEnemies.forEach(function(enemy) {
       enemy.render();
     });
 
-    player.render();
+    board.render();
   }
 
   /* This function does nothing but it could have been a good place to
@@ -172,7 +180,14 @@ var Engine = (function(global) {
     'images/water-block.png',
     'images/grass-block.png',
     'images/enemy-bug.png',
-    'images/char-boy.png'
+    'images/char-boy.png',
+    'images/char-cat-girl.png',
+    'images/char-horn-girl.png',
+    'images/char-pink-girl.png',
+    'images/char-princess-girl.png',
+    'images/Gem Blue.png',
+    'images/Gem Green.png',
+    'images/Gem Orange.png'
   ]);
   Resources.onReady(init);
 

@@ -9,6 +9,9 @@
   var loading = [];
   var readyCallbacks = [];
 
+  var ROW_SIZE = 83;
+  var COL_SIZE = 101;
+
   /* This is the publicly accessible image loading function. It accepts
   * an array of strings pointing to image files or a string for a single
   * image. It will then call our private image loading function accordingly.
@@ -103,6 +106,8 @@
   * developers by creating a global Resources object.
   */
   window.Resources = {
+    ROW_SIZE: ROW_SIZE,
+    COL_SIZE: COL_SIZE,
     load: load,
     get: get,
     onReady: onReady,
