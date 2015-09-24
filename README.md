@@ -3,7 +3,9 @@ Frogger Arcade Game
 
 A lot of the code in this project is from Udacity and is subjected to Udacity's copyrights and policies: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
 
-# Setup #
+# How to play #
+
+Open the file `index.html` in a web browser to start the game (ﾉ´ヮ´)ﾉ*:･ﾟ✧
 
 The **playable character** is located at the bottom of the screen when the game start. The player can control this character by arrow keys
 
@@ -15,6 +17,8 @@ The **board** is divided into 3 regions:
 The **enemies** are the bugs that spawn on `stone`. They speed up after every time they reappear
 
 The **gems** are shiny objects that periodically appear on `stone`. They are regenerated every 5 seconds.
+
+You can press **Enter** (on a Windows keyboard) or **Return** (on a Mac keyboard) at any time to restart the game.
 
 # Mechanics #
 

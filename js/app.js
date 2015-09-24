@@ -7,6 +7,15 @@ var Enemy = function(lane) {
   // a helper we've provided to easily load images
   this.sprite = 'images/enemy-bug.png';
 
+  this.lane = lane;
+  this.respawn(lane);
+};
+
+Enemy.prototype.getLane = function() {
+  return this.lane;
+};
+
+Enemy.prototype.respawn = function(lane) {
   // Initate monster's initial location
   this.x = 0;
   this.y = (lane + 1) * Resources.ROW_SIZE;
@@ -58,13 +67,7 @@ var availChars = [
 
 // Player class to instantiate controllable characters
 var Player = function(selected) {
-  // Randomize a character if not specified
-  if (!selected) {
-    selected = Math.floor(Math.random() * 5);
-  }
-  this.sprite = availChars[selected];
-
-  this.setStartingPosition();
+  this.reset(selected);
 };
 
 // Move the character across the board by user's input
@@ -82,6 +85,9 @@ Player.prototype.handleInput = function(key) {
     case 'down':
       this.update(this.x, this.y + Resources.ROW_SIZE);
       break;
+    case 'return':
+      board.reset();
+      break;
     default:
       break;
   }
@@ -93,7 +99,13 @@ Player.prototype.render = function() {
 };
 
 // Set player's starting position
-Player.prototype.setStartingPosition = function() {
+Player.prototype.reset = function(selected) {
+  // Randomize a character if not specified
+  if (!selected) {
+    selected = Math.floor(Math.random() * 5);
+  }
+  this.sprite = availChars[selected];
+
   this.x = 2 * Resources.COL_SIZE;
   this.y = 5 * Resources.ROW_SIZE;
 };
@@ -120,11 +132,7 @@ var Board = function(player, enemies) {
   this.enemies = enemies;
 
   // Set initial timer to 30 seconds
-  this.timer = 30;
-
-  this.score = 0;
-  this.gem = null;
-  this.finished = false;
+  this.reset();
 };
 
 // Clear generated gem
@@ -135,9 +143,9 @@ Board.prototype.clearGem = function() {
 // Generate a new gem
 Board.prototype.generateGem = function() {
   var GEMS = [
-    'images/Gem Blue.png',
-    'images/Gem Green.png',
-    'images/Gem Orange.png'
+    'images/GemBlue.png',
+    'images/GemGreen.png',
+    'images/GemOrange.png'
   ];
   var selected = Math.floor(Math.random() * 3);
   var x = Math.floor(Math.random() * 5);
@@ -231,6 +239,21 @@ Board.prototype.renderTimer = function() {
   ctx.fillText(time, 160, 40);
 };
 
+// Reset the game
+Board.prototype.reset = function() {
+  this.timer = 30;
+
+  this.score = 0;
+  this.gem = null;
+  this.finished = false;
+
+  this.player.reset();
+  console.log(this.enemies);
+  this.enemies.forEach(function(enemy) {
+    enemy.respawn(enemy.getLane());
+  });
+};
+
 // Update board status at every tick of the system
 Board.prototype.update = function(dt) {
   this.timer -= dt;
@@ -238,7 +261,7 @@ Board.prototype.update = function(dt) {
   // Check if player collide with any enemy
   if (this.hasCollided()) {
     this.score--;
-    this.player.setStartingPosition();
+    this.player.reset();
     return;
   }
 
@@ -288,6 +311,7 @@ var board = new Board(player, allEnemies);
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
   var allowedKeys = {
+    13: 'return',
     37: 'left',
     38: 'up',
     39: 'right',
