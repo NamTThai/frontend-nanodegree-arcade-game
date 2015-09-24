@@ -248,7 +248,6 @@ Board.prototype.reset = function() {
   this.finished = false;
 
   this.player.reset();
-  console.log(this.enemies);
   this.enemies.forEach(function(enemy) {
     enemy.respawn(enemy.getLane());
   });
